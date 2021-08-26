@@ -1,0 +1,27 @@
+#To check git version
+git --version
+
+#To set up
+git config --global user.name "yourname"
+git config --global user.email "your-email"
+git config --global color.ui auto
+
+#To check what we just set up above
+git config -l
+
+#To initialize git in your current working directory
+#Mostly, this is for brand new project
+git init .
+
+#To add the file in the current working directory into staging area
+git add <file>
+#Or git add . means add all the files in the current working directory
+git add .
+
+#To check the status of the git
+git status
+
+#To unstage
+git restore --staged <file>
+
+
