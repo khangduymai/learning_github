@@ -33,4 +33,7 @@ git log
 #Get the hash number of the log then using it fot show
 git show <copied_hash_code>
 
+#To amend commit message
+git commit --amend -m "your-message"
+
 
