@@ -9,3 +9,5 @@ git_branch() {
   fi
 }
 PS1='\u@\h:\w`git_branch` \$ '
+
+#Another way
