@@ -1,0 +1,13 @@
+git_branch() {
+  branch=$(__git_ps1 2> /dev/null)
+  if [ "$branch" = " (main)" ]; then
+     echo -e "\033[33m${branch}\033[00m" # yellow
+  elif [ "$branch" = "" ]; then
+     echo -e "\033[31m (no git)\033[00m" # red
+  else
+     echo -e "\033[32m${branch}\033[00m" # green
+  fi
+}
+PS1='\u@\h:\w`git_branch` \$ '
+
+#Another way
