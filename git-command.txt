@@ -70,4 +70,7 @@ git checkout -b <branch_name>
 #To push a new local branch to remote
 git push -u origin <branch_name>
 
+#To delete a local branch
+git branch -d <branch_name>
+
 
