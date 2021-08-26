@@ -54,13 +54,20 @@ git branch -r
 #To check all the brnach both local and remote
 git branch -a
 
+#Method 1 to create a local branch and switch to new local branch
 #To create branch from local
 git branch <branch_name>
 
-#To switch branch
+#To switch branch from local
 git checkout <branch_name>
 
 #To switch to previous branch
 git checkout -
+
+#Method 2 to create a local branch and switch to new local branch
+git checkout -b <branch_name>
+
+#To push a new local branch to remote
+git push -u origin <branch_name>
 
 
