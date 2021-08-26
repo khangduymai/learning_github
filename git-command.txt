@@ -36,4 +36,7 @@ git show <copied_hash_code>
 #To amend commit message
 git commit --amend -m "your-message"
 
+#When we deal with multiple git account, need to verify ssh private key
+export GIT_SSH_COMMAND="ssh -i ~/.ssh/khang_github"
+
 
