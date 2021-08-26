@@ -39,4 +39,28 @@ git commit --amend -m "your-message"
 #When we deal with multiple git account, need to verify ssh private key
 export GIT_SSH_COMMAND="ssh -i ~/.ssh/khang_github"
 
+#To push the files from local to remote in this case the repo was clone from GitHub
+git push
+
+#To check remote repo
+git remote -v
+
+#To check the branch from local
+git branch
+
+#To check the branch from remote
+git branch -r
+
+#To check all the brnach both local and remote
+git branch -a
+
+#To create branch from local
+git branch <branch_name>
+
+#To switch branch
+git checkout <branch_name>
+
+#To switch to previous branch
+git checkout -
+
 
