@@ -136,3 +136,5 @@ alias pbcopy="xclip -sel clip"
 alias pbpaste="xclip -selection clipboard -o"
 
 alias gs="git status"
+
+alias h="hello conflict from other person"
