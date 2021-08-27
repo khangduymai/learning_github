@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+
+
+###--------------------------------------------------------------------------------------------------
+# FUNCTIONS
+
+clear_and_load() {
+    clear
+    if [ -f "$HOME/.bashrc" ]; then
+        source "$HOME/.bashrc"
+        return 0
+    fi
+
+    if [ -f "$HOME/.bash_profile" ]; then
+        source "$HOME/.bash_profile"
+        return 0
+    fi
+
+    if [ -f "$HOME/.profile" ]; then
+        source "$HOME/.profile"
+        return 0
+    fi
+}
+
+
+###--------------------------------------------------------------------------------------------------
+# PROMPT BACKGROUND AND FOREGROUND
+
+prompt_color_escape() {
+    # Make sure using escape \] for PS1
+    printf '\[\e['$@'m\]'
+
+    # echo '\[\033['$@'m\]'
+}
+
+set=$(prompt_color_escape '00')
+RESET=$(prompt_color_escape '')
+
+# 01; bold text version of that color
+# 38;5;[000-255] foreground color
+# 48;5;[000-255] background color
+BG_RED=$(prompt_color_escape '48;5;196')
+
+FG_CYAN=$(prompt_color_escape '01;38;5;075')
+FG_BRIGHT_GREEN=$(prompt_color_escape '01;38;5;118')
+FG_YELLOW=$(prompt_color_escape '01;38;5;226')
+FG_ORANGE=$(prompt_color_escape '01;38;5;214')
+FG_WHITE=$(prompt_color_escape '01;38;5;231')
+FG_RED=$(prompt_color_escape '01;38;5;009')
+
+FG_BOLD=$(prompt_color_escape '01')
+FG_BOLD_RESET=$(prompt_color_escape '21')
+
+get_git_prompt() {
+    current_branch=$(git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/)*$//' -e 's/* (*\(.*\)/\1/' -e 's/^[Hh][Ee][Aa][Dd] detached at /:/')
+
+    # if there is no branch, don't display anything
+    # quote the variable in case of string with multiple words
+    # -z if the string length is zero
+    if [ -z "${current_branch}" ]; then
+        return 0
+    fi
+
+    remote_tracking_branch=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null);
+
+    if [ ! -z "${remote_tracking_branch}" ]; then
+        read ahead behind <<< $(git rev-list --left-right --count ${current_branch}...${remote_tracking_branch} 2>/dev/null)
+
+        if [ ! -z ${ahead} ] && [ ${ahead} -gt 0 ]; then
+            current_branch=${current_branch}' ↑ '${ahead}
+        fi
+
+        if [ ! -z ${behind} ] && [ ${behind} -gt 0 ]; then
+            current_branch=${current_branch}' ↓ '${behind}
+        fi
+    fi
+
+    git_status_count=$(git status -s 2>/dev/null | wc -l | tr -d ' ')
+
+    git_stash_count=$(git stash list 2>/dev/null | wc -l | tr -d ' ')
+
+    git_conflict_count=$(git diff --name-only --diff-filter=U 2>/dev/null | wc -l | tr -d ' ')
+
+    if [ ${git_status_count} -eq 0 ]; then
+        git_status_count=${FG_BRIGHT_GREEN}'✔ ' # ✔✓
+    else
+        git_status_count='▲ '${git_status_count}
+    fi
+
+    if [ ${git_stash_count} -eq 0 ]; then
+        git_stash_count=''
+    else
+        git_stash_count='⚑ '${git_stash_count}
+    fi
+
+    if [ ${git_conflict_count} -eq 0 ]; then
+        git_conflict_count=''
+    else
+        git_conflict_count=${FG_RED}'✗ '${git_conflict_count}
+    fi
+
+    # squeeze spaces into single space | then remove all trailing spaces
+    printf " (${current_branch}) ${git_status_count} ${git_stash_count} ${git_conflict_count}" | tr -s " " | sed -e 's/[[:space:]]*$//'
+}
+
+get_vpn_prompt() {
+    is_vpn=$(pgrep -x openconnect)
+
+    if [ $? -eq 0 ]; then
+        printf ' (VPN)'
+    fi
+}
+
+set_bash_prompt() {
+    PS1="${SET}${FG_WHITE}${BG_RED}\u$(get_vpn_prompt)${RESET}${FG_CYAN} \A${FG_BRIGHT_GREEN} \w${FG_YELLOW}$(get_git_prompt)${RESET}\n${FG_CYAN}\$${RESET} "
+}
+
+###--------------------------------------------------------------------------------------------------
+
+# Note: append to PROMPT_COMMAND to keep default prompt behavior
+# use PROMPT_COMMAND to be able to eload the whole PS1 and refresh prompt color correctly
+if ! grep -q 'set_bash_prompt' <<< "${PROMPT_COMMAND}"; then
+    PROMPT_COMMAND="set_bash_prompt; ${PROMPT_COMMAND}"
+fi
+
+
+###--------------------------------------------------------------------------------------------------
+# ALIAS
+
+alias c="clear"
+alias cl="clear_and_load"
+alias g="git"
+alias git_khang="export GIT_SSH_COMMAND=\"ssh -i ~/.ssh/khang_github\""
+alias git_unified="export GIT_SSH_COMMAND=\"ssh -i ~/.ssh/id_rsa\""
+alias pbcopy="xclip -sel clip"
+alias pbpaste="xclip -selection clipboard -o"
+
