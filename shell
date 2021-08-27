@@ -137,3 +137,5 @@ alias pbpaste="xclip -selection clipboard -o"
 
 alias gs="git status"
 #this is causing conflict between local and remote (others)
+
+alias h="hello conflict from other person"
