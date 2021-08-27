@@ -135,3 +135,4 @@ alias git_unified="export GIT_SSH_COMMAND=\"ssh -i ~/.ssh/id_rsa\""
 alias pbcopy="xclip -sel clip"
 alias pbpaste="xclip -selection clipboard -o"
 
+alias gs="git status"
