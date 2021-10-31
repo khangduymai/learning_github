@@ -1,0 +1,21 @@
+-- list all the files 
+git ls-files --stage
+
+-- to compare different files between stage and commit
+git diff --cached
+
+-- to compare different files between worktree and stage 
+git diff
+
+git restore --staged <file_name>
+git restore --worktree <file_name>
+
+
+-- to fetch from all remotes
+git fetch
+
+-- then git merge the branch we want
+git merge origin/<branch>
+
+-- to fetch and merge 
+git pull 
